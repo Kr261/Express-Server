@@ -8,8 +8,12 @@ const users = [
   { username: "user1", password: "password1" },
   { username: "user2", password: "password2" },
 ];
+
+
 router.post("/login", (req, res) => {
   const { username, password } = req.body;
+
+ 
   const user = users.find(
     (user) => user.username === username && user.password === password
   );
@@ -18,12 +22,14 @@ router.post("/login", (req, res) => {
     return res.status(401).json({ error: "Invalid username or password" });
   }
 
+  
   const token = jwt.sign({ username: user.username }, process.env.SECRET_KEY, {
     expiresIn: "1h",
   });
 
   res.json({ message: "Welcome", token });
 });
+
 
 router.get("/protected", (req, res) => {
   const token = req.headers.authorization;
