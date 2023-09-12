@@ -1,18 +1,22 @@
 const express = require("express");
 const listViewRouter = express.Router();
 
-module.exports = (taskList) => {
-  listViewRouter.get("/completed", (req, res) => {
-    const completedTasks = taskList.filter((task) => task.isCompleted === true);
-    res.json(completedTasks);
-  });
+//Middleware para validar los valores de la solicitud GET
+const correctParams = (req, res, next) => {
+  const { status } = req.query;
+  if (status !== "true" && status !== "false") {
+    return res.status(400).json({ message: "Invalid params" });
+  }
+  next();
+};
 
-  listViewRouter.get("/incomplete", (req, res) => {
-    console.log("Hola", taskList);
-    const incompleteTasks = taskList.filter(
-      (task) => task.isCompleted === false
+module.exports = (taskList) => {
+    listViewRouter.get("/", correctParams, (req, res) => {
+    const { status } = req.query;
+    const filteredTasks = taskList.filter(
+      (task) => task.isCompleted === (status === "true")
     );
-    res.json(incompleteTasks);
+    res.json(filteredTasks);
   });
 
   return listViewRouter;

@@ -31,18 +31,29 @@ const taskList = [
   },
 ];
 
-const listViewRouter = require("./list-view-router")(taskList); 
-const listEditRouter = require("./list-edit-router")(taskList);
+app.use((req, res, next) => {
+  const methodValidate = req.method.toUpperCase(); 
 
-app.use("/list-view", listViewRouter);
+  const respuesta = ["POST", "PUT", "GET", "DELETE"]; 
+
+  if (!respuesta.includes(methodValidate)) {
+    return res.status(400).json({ message: "Invalid method" }); 
+  }
+  next(); 
+});
+
+const listViewRouter = require("./list-view-router")(taskList); 
+const listEditRouter = require("./list-edit-router")(taskList); 
+
+app.use("/list-view", listViewRouter); 
 app.use("/list-edit", listEditRouter);
 
 app.listen(port, () => {
-  console.log(`server listening in port ${8000}`);
+  console.log(`Server listening on port ${port}`); 
 });
 
 app.get("/tasks", (req, res) => {
-  res.json(taskList);
+  res.json(taskList); 
 });
 
-module.exports = app;
+module.exports = app; 
