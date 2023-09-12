@@ -1,6 +1,7 @@
 const express = require("express");
 const port = 8000;
 const app = express();
+const loginRoutes = require("./login-routes");
 
 app.use(express.json());
 
@@ -47,6 +48,7 @@ const listEditRouter = require("./list-edit-router")(taskList);
 
 app.use("/list-view", listViewRouter); 
 app.use("/list-edit", listEditRouter);
+app.use(loginRoutes); // Añadir enrutador de login
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`); 

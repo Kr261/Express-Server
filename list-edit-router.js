@@ -7,10 +7,11 @@ const createValidation = (req, res, next) => {
 
   if (!id || !taskname || !description || !isCompleted) {
     return res.status(400).json({ message: "Invalid info" }); 
-
+  }
+  
   req.body.isCompleted = JSON.parse(isCompleted); 
 
-  next(); }
+  next(); 
 };
 
 module.exports = (taskList) => {
